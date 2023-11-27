@@ -1,6 +1,6 @@
 import assert from "assert";
 
-enum Color {
+export enum Color {
   Red = "Red",
   Blue = "Blue",
   Green = "Green",
@@ -8,23 +8,23 @@ enum Color {
   Wild = "Wild",
 }
 
-enum Value {
-  Zero = 0,
-  One = 1,
-  Two = 2,
-  Three = 3,
-  Four = 4,
-  Five = 5,
-  Six = 6,
-  Seven = 7,
-  Eight = 8,
-  Nine = 9,
-  Skip = 10,
-  Reverse = 11,
-  DrawTwo = 12,
-  DrawFour = 13,
-  Wild = 14,
-  ThemedWild = 15,
+export enum Value {
+  Zero = "Zero",
+  One = "One",
+  Two = "Two",
+  Three = "Three",
+  Four = "Four",
+  Five = "Five",
+  Six = "Six",
+  Seven = "Seven",
+  Eight = "Eight",
+  Nine = "Nine",
+  Skip = "Skip",
+  Reverse = "Reverse",
+  DrawTwo = "DrawTwo",
+  DrawFour = "DrawFour",
+  Wild = "Wild",
+  ThemedWild = "ThemedWild",
 }
 
 export class UnoCard {
@@ -34,6 +34,10 @@ export class UnoCard {
   constructor(color: Color, value: Value) {
     this.color = color;
     this.value = value;
+  }
+
+  public toString() {
+    return `${this.color} ${this.value}`;
   }
 }
 
@@ -66,10 +70,16 @@ export class UnoDeck {
     }
   }
 
+  public toString() {
+    return this.cards.map((card) => card.toString());
+  }
+
   constructor() {
     this.generateDeck();
 
-    console.log('tomato')
+    this.shuffle();
+    this.shuffle();
+    this.shuffle();
   }
 
   private generateDeck() {

@@ -1,14 +1,20 @@
+import { type UnoCard } from "./unoDeck";
+
 export class PlayerData {
   public name: string;
   public id: number;
-  private cards: string[] = [];
+  private cards: UnoCard[] = [];
 
   public get cardsRemaining(): number {
     return this.cards.length;
   }
 
-  public giveCard(card: string) {
+  public giveCard(card: UnoCard) {
     this.cards.push(card);
+  }
+
+  public debugDisplayCards(): string {
+    return this.cards.map((card) => card.toString()).join(", ");
   }
 
   constructor(name: string, id: number) {
