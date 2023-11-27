@@ -13,6 +13,10 @@ export class PlayerData {
     this.cards.push(card);
   }
 
+  public giveCards(cards: UnoCard[]) {
+    this.cards.push(...cards);
+  }
+
   public debugDisplayCards(): string {
     return this.cards.map((card) => card.toString()).join(", ");
   }

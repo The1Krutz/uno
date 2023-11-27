@@ -1,30 +1,30 @@
 import assert from "assert";
 
 export enum Color {
-  Red = "Red",
-  Blue = "Blue",
-  Green = "Green",
-  Yellow = "Yellow",
-  Wild = "Wild",
+  Red = "R",
+  Blue = "B",
+  Green = "G",
+  Yellow = "Y",
+  Wild = "W",
 }
 
 export enum Value {
-  Zero = "Zero",
-  One = "One",
-  Two = "Two",
-  Three = "Three",
-  Four = "Four",
-  Five = "Five",
-  Six = "Six",
-  Seven = "Seven",
-  Eight = "Eight",
-  Nine = "Nine",
+  Zero = "0",
+  One = "1",
+  Two = "2",
+  Three = "3",
+  Four = "4",
+  Five = "5",
+  Six = "6",
+  Seven = "7",
+  Eight = "8",
+  Nine = "9",
   Skip = "Skip",
   Reverse = "Reverse",
-  DrawTwo = "DrawTwo",
-  DrawFour = "DrawFour",
-  Wild = "Wild",
-  ThemedWild = "ThemedWild",
+  DrawTwo = "+2",
+  DrawFour = "+4",
+  Wild = "W",
+  ThemedWild = "+W",
 }
 
 export class UnoCard {
@@ -37,24 +37,24 @@ export class UnoCard {
   }
 
   public toString() {
-    return `${this.color} ${this.value}`;
+    return `${this.color}${this.value}`;
   }
 }
 
 export class UnoDeck {
   public cards: UnoCard[] = [];
 
-  public drawCard(): UnoCard | Error {
+  public drawCard(): UnoCard {
     const card = this.cards.shift();
 
-    if (card) {
-      return card;
-    } else {
-      return new Error("No cards left in deck");
+    if (!card) {
+      throw new Error("No cards left in deck");
     }
+
+    return card;
   }
 
-  public drawCards(amount: number): (UnoCard | Error)[] {
+  public drawCards(amount: number): UnoCard[] {
     const cards = [];
     for (let i = 0; i < amount; i++) {
       cards.push(this.drawCard());
@@ -85,29 +85,37 @@ export class UnoDeck {
   private generateDeck() {
     this.cards = [];
 
-    for (const color of [Color.Red, Color.Blue, Color.Green, Color.Yellow]) {
+    const colors = [Color.Red, Color.Blue, Color.Green, Color.Yellow];
+    const basicValues = [
+      Value.One,
+      Value.Two,
+      Value.Three,
+      Value.Four,
+      Value.Five,
+      Value.Six,
+      Value.Seven,
+      Value.Eight,
+      Value.Nine,
+      Value.DrawTwo,
+      Value.Reverse,
+      Value.Skip,
+    ];
+    const wildValues = [Value.Wild, Value.DrawFour, Value.ThemedWild];
+
+    for (const color of colors) {
       this.cards.push(new UnoCard(color, Value.Zero));
 
-      for (let i = 0; i < 2; i++) {
-        this.cards.push(new UnoCard(color, Value.One));
-        this.cards.push(new UnoCard(color, Value.Two));
-        this.cards.push(new UnoCard(color, Value.Three));
-        this.cards.push(new UnoCard(color, Value.Four));
-        this.cards.push(new UnoCard(color, Value.Five));
-        this.cards.push(new UnoCard(color, Value.Six));
-        this.cards.push(new UnoCard(color, Value.Seven));
-        this.cards.push(new UnoCard(color, Value.Eight));
-        this.cards.push(new UnoCard(color, Value.Nine));
-        this.cards.push(new UnoCard(color, Value.DrawTwo));
-        this.cards.push(new UnoCard(color, Value.Reverse));
-        this.cards.push(new UnoCard(color, Value.Skip));
+      for (const value of basicValues) {
+        for (let i = 0; i < 2; i++) {
+          this.cards.push(new UnoCard(color, value));
+        }
       }
     }
 
-    for (let i = 0; i < 4; i++) {
-      this.cards.push(new UnoCard(Color.Wild, Value.Wild));
-      this.cards.push(new UnoCard(Color.Wild, Value.DrawFour));
-      this.cards.push(new UnoCard(Color.Wild, Value.ThemedWild));
+    for (const value of wildValues) {
+      for (let i = 0; i < 4; i++) {
+        this.cards.push(new UnoCard(Color.Wild, value));
+      }
     }
 
     assert(this.cards.length === 112);
